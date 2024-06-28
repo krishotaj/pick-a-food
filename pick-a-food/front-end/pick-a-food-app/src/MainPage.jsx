@@ -17,3 +17,5 @@ function centralCard(){
 
 //3)create a function for the reroll button that will start the roll
 //again in the same page 
+
+export default centralCard

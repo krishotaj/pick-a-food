@@ -7,3 +7,5 @@ function Navbar(){
         <a href="">Sign out</a>
     </div>
 }
+
+export default Navbar
