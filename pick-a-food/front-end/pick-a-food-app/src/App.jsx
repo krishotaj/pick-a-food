@@ -5,7 +5,7 @@ function App() {
   return (
     <div className="App">
       {/*navbar*/}
-      {/*navbar*/}
+      {/*navbar boop*/}
       {/*mainpage*/}
       {/*myhistory*/}
       {/*myprofile*/}
