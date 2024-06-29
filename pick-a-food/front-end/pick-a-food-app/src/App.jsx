@@ -1,6 +1,7 @@
+import data from "./Data";
 
-import './App.css';
 
+console.log(data);
 function App() {
   return (
     <div className="App">
