@@ -5,6 +5,7 @@ console.log(data);
 function App() {
   return (
     <div className="App">
+      {/*signup-signin-page*/}
       {/*navbar*/}
       {/*mainpage*/}
       {/*myhistory*/}

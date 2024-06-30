@@ -9,7 +9,7 @@ const router = express.Router();
     router.post('/signup', controllers.signup);
     
     //route for /signin or /login
-    router.get('/login', controllers.signIn);
+    router.post('/login', controllers.signIn);
 
     //route for get all users (/users)
     router.get('/users', controllers.getUsers);

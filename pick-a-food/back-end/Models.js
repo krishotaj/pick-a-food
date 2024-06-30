@@ -1,6 +1,11 @@
 const mongoose = require('mongoose');
 
-mongoose.connect("mongodb+srv://kristianahotaj99:SHAC25@krissha.7ubij5l.mongodb.net/pick-a-food")
+
+main().then(()=>console.log("Db connected successfully")).catch(err => console.log(err));
+
+async function main() {
+  await mongoose.connect("mongodb+srv://kristianahotaj99:SHAC25@krissha.7ubij5l.mongodb.net/pick-a-food")
+}
 
 
 const userSchema = new mongoose.Schema({
@@ -19,23 +24,23 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: [true, "Please Enter Your Password"],
         minLength: [8, "Password should be greater than 8 characters"],
-        select: false,
+        
     },
-    history: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Food' }]
+    history: [{ name: String, imgUrl: String, date: {type: Date, default: Date.now}}]
 })
 
-const foodSchema = new mongoose.Schema({
-    name: {
-      type: String
-    },
-    imgUrl: {
-      type: String
-    }
-  });
+// const foodSchema = new mongoose.Schema({
+//     name: {
+//       type: String
+//     },
+//     imgUrl: {
+//       type: String
+//     }
+//   });
 
 
 
 
 const User = mongoose.model('User', userSchema)
-const Food = mongoose.model('Food', foodSchema);
-module.exports = {User, Food};
+// const Food = mongoose.model('Food', foodSchema);
+module.exports = {User};

@@ -1,5 +1,5 @@
 //  getUserHistory, saveFoodToHistory, deleteFoodFromHistory, updateUserProfile
-const {User, Food} = require('./Models');
+const {User} = require('./Models');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken')
 
@@ -27,20 +27,22 @@ const signup = async (req, res)=>{
 //Create token for user
 const signIn= async (req,res)=>{
     const user = await User.findOne({email: req.body.email})
+    console.log(user)
     if(user){
-        bcrypt.compare(req.body.password, user.password, (err, result)=>{
-            if(result){
-                const token = jwt.sign({_id:user._id}, "oi kotompoukies einai oti kalutero")
-                res.send({token : token})
-                //maybe use redirect here?
-            }else{
+        let isPasswordValid= await bcrypt.compare(req.body.password, user.password)
+    
+        if(isPasswordValid){
+            const token = jwt.sign({_id:user._id}, "oi kotompoukies einai oti kalutero")
+            res.send({token})
+        }else{
                res.send({msg: "Wrong email or password"})
            }
-        })
-    }else {
-        res.send({msg: "Wrong email or password"})
+        }
+    else {
+        res.send({msg: "User not found. Please sign up!"})
     }
 }
+
 
 //Get users
 const getUsers =  async (req, res) => {
@@ -61,16 +63,22 @@ const getUserHistory = async (req, res) => {
 
 const saveFoodToHistory = async (req, res) => {
     const user = await User.findById(req.params.id);
+    const {id,name, imgUrl}= req.body
     if (user) {
-        const food = await Food.findById(req.body.FoodId)
-        if (food){
-            user.history.push(food)
-            await user.save()
-            res.send({msg:"Food saved to history"})
-        }else{
-            res.send({msg:"Food not found"})
-        }
-    } else{ 
+        user.history.push({id, name, imgUrl})
+        await user.save()
+        res.send({msg : "Food added successfully", user})
+        // const food = await Food.findById(req.body.FoodId)
+    //     if (food){
+    //         user.history.push(food)
+    //         await user.save()
+    //         res.send({msg:"Food saved to history"})
+    //     }else{
+    //         res.send({msg:"Food not found"})
+    //     }
+     }
+      else{ 
+
     res.send({msg:"User not found"})
     }
 }
@@ -78,15 +86,11 @@ const saveFoodToHistory = async (req, res) => {
 const deleteFoodFromHistory = async (req, res) => {
     const user = await User.findById(req.params.id);
     if (user) {
-      const foodId = req.body.foodId;
-      const index = user.history.findIndex((food) => food._id.toString() === foodId)
-      if (index !== -1) {
-        user.history.splice(index, 1)
-        await user.save();
+        let foodId = req.params.history
+        user.history.splice(foodId)
+        user.save()
         res.send({msg:"Food deleted from history"})
-      } else {
-        res.send({msg:"Food not found in history"})
-      }
+        //redirect back?
     } else {
       res.send({ msg: 'User not found' });
     }
